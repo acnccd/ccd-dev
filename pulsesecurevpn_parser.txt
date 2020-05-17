@@ -14,17 +14,17 @@
 //
 //  REFERENCE: 
 //  Using functions in Azure monitor log queries: https://docs.microsoft.com/en-us/azure/azure-monitor/log-query/functions
-//  
+//  Pulse Secure VPN Event Log Format: https://docs.pulsesecure.net/WebHelp/Content/PCS/PCS_AdminGuide_8.2/Displaying%20Events%20Logs.htm
 //
 Syslog
 | where Computer in ("datasource") and Facility == "local4"
 | extend Parser = extract_all(@'^(\d{4}\-\d{2}-\d{2}\s)?(\d{2}\:)?\d{2}:\d{2}\s(\S+)\s(\S+)\s(\S+)\s\[(\S+)\]\s(\S+)\((.*)?\)\[(.*)\]\s\-\s(.*)',dynamic([1,2,3,4,5,6,7,8,9,10]),SyslogMessage)
 | mv-expand Parser
-| extend logTime = todatetime(strcat(tostring(Parser[0]),'T',tostring(Parser[1]))), 
-    vpn_type = tostring(Parser[3]), 
-    client_ip = tostring(Parser[5]), 
-    vpn_user = tostring(Parser[6]), 
-    user_type = tostring(Parser[7]), 
-    client_device_type = tostring(Parser[8]), 
-    vpn_message = tostring(Parser[9])
+| extend LogTime = todatetime(strcat(tostring(Parser[0]),'T',tostring(Parser[1]))), 
+    Node = tostring(Parser[3]), 
+    Source_IP = tostring(Parser[5]), 
+    User = tostring(Parser[6]), 
+    Realm = tostring(Parser[7]), 
+    EventID = tostring(Parser[8]), 
+    Messages = tostring(Parser[9])
 | project-away Parser
