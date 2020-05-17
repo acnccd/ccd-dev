@@ -1,0 +1,30 @@
+//  Title:           Juniper Pulse Secure VPN Data Parser
+//  Version:         1.0
+//  Last Updated:    05/12/2020
+//  Comment:         Inital Release
+//  
+//  DESCRIPTION:
+//  This parser takes raw Juniper Pulse Secure VPN logs from a Syslog data stream and parses the data into a normalized schema
+//
+//  USAGE:
+//  1. Open Log Analytics/Azure Sentinel Logs blade. Copy the query below and paste into the Logs query window. 
+//  2. In the query window, on the 2nd line of the query, enter the hostname(s) of your Pulse Secure VPN device(s). Run the query to validate data is being recieved and parsed.
+//  3. Click the Save button above the query. A pane will appear on the right, select "as Function" from the drop down. Enter a Function Name. In order for the Pulse Secure VPN logs to work with pre-built queries and workbooks the Function Alias
+//  4. Function App usually take 10-15 minutes to activate. You can then use Function Alias for other queries
+//
+//  REFERENCE: 
+//  Using functions in Azure monitor log queries: https://docs.microsoft.com/en-us/azure/azure-monitor/log-query/functions
+//  
+//
+Syslog
+| where Computer in ("datasource") and Facility == "local4"
+| extend Parser = extract_all(@'^(\d{4}\-\d{2}-\d{2}\s)?(\d{2}\:)?\d{2}:\d{2}\s(\S+)\s(\S+)\s(\S+)\s\[(\S+)\]\s(\S+)\((.*)?\)\[(.*)\]\s\-\s(.*)',dynamic([1,2,3,4,5,6,7,8,9,10]),SyslogMessage)
+| mv-expand Parser
+| extend logTime = todatetime(strcat(tostring(Parser[0]),'T',tostring(Parser[1]))), 
+    vpn_type = tostring(Parser[3]), 
+    client_ip = tostring(Parser[5]), 
+    vpn_user = tostring(Parser[6]), 
+    user_type = tostring(Parser[7]), 
+    client_device_type = tostring(Parser[8]), 
+    vpn_message = tostring(Parser[9])
+| project-away Parser
