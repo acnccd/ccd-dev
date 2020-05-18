@@ -7,15 +7,6 @@
 //  This parser takes raw Blue Coat ProxySG Access Logs from a Syslog data stream and parses the data into a normalized schema
 //
 //  USAGE:
-//  1. Open Log Analytics/Azure Sentinel//  Title:           Blue Coat ProxySG Data Parser
-//  Version:         1.0
-//  Last Updated:    05/12/2020
-//  Comment:         Inital Release
-//
-//  DESCRIPTION:
-//  This parser takes raw Blue Coat ProxySG Access Logs from a Syslog data stream and parses the data into a normalized schema
-//
-//  USAGE:
 //  1. Open Log Analytics/Azure Sentinel Logs blade. Copy the query below and paste into the Logs query window. 
 //  2. In the query window, on the 2nd line of the query, enter the hostname(s) of your Blue Coat device(s). Run the query to validate data is being recieved and parsed.
 //  3. Click the Save button above the query. A pane will appear on the right, select "as Function" from the drop down. Enter a Function Name. In order for the Blue Coat ProxySG access logs to work with pre-built queries and workbooks the Function Alias
