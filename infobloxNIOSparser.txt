@@ -19,7 +19,7 @@
 //
 //
 let RawData = Syslog 
-    |where Computer in ("datasource") and Facility == "local6"
+    //| where Computer in ("datasource") and Facility == "local6"
     | extend Parser = extract_all(@"^([a-zA-Z]{3})\s(\d+)\s(\d{2}:\d{2}:\d{2})\s(\S+)\s([a-z_]+)(\[(\d+)\]|\:)(\:\s)?([a-zA-Z-_]+)(\s\:)?(.*)", dynamic([1,2,3,4,5,6,7,8,9,10,11]), SyslogMessage)
     | mv-expand todynamic(Parser)
     | extend month = tostring(Parser[0]), 
