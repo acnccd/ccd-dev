@@ -185,7 +185,7 @@ let dnsclient = RawData
     | where LogType == "named" and Type == "client"
     | extend dnsclient = extract_all(@"(\S+)\s(\S+)\#(\d+)(\:\s|\/)([\w\s\:]+)\s(\'(\S+)\')?(.*)",dynamic([1,2,3,4,5,6,7,8]), RawData_subString)
     | mv-expand todynamic(dnsclient)
-    | extend client_ip = tostring(dnsclient[1]),
+    | extend Client_IP= tostring(dnsclient[1]),
         Port = tostring(dnsclient[2]),
         Action = tostring(dnsclient[4]),
         Zone = tostring(dnsclient[6]),
@@ -204,4 +204,4 @@ let allotherdhcpdTypes = RawData
 let allotherdnsTypes = RawData
     | where LogType == "named" and Type !in ("zone","client","gss_accept_sec_context");
 union dhcpdiscover, dhcprequest, dhcprelease, dhcpack, dhcpoffer, dhcpexpire, dhcpbindupdate, dhcpadded, dhcpoption, dhcpremoved, dhcpsession, dhcpother, dnszone, dnsclient, dnsgss, allotherLogTypes, allotherdhcpdTypes, allotherdnsTypes
-//| project-away RawData_subString
+| project-away RawData_subString
