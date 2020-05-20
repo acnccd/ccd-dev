@@ -16,10 +16,13 @@
 // REFERENCES: 
 // Using functions in Azure monitor log queries: https://docs.microsoft.com/en-us/azure/azure-monitor/log-query/functions
 // Symantec VIP logging format: https://help.symantec.com/cs/VIP_EG_INSTALL_CONFIG/VIP/v134651706_v128483142/Legacy-log-format?locale=EN_US
+// 
+//      AUDIT "2020-05-12 12:16:56.610 GMT-0500" 10.99.99.99 TokenOnly:1812 0 0 22905 "text=Access GRANTED 0x0: Success&tokenid=SAMP7282958 ,reason=0&tokenid=SAMP7282958; Success" Thread-2500 VSValidationEngine.c
+//      INFO "2020-05-13 11:19:55.906 GMT-0500" 0.0.0.0 TokenOnly:1812 0 0 86017 "text=Sending Acces-Reject for user [user72] , reason=12; Authentication Failed." Thread-2520 VSAuthOTPStandardControllerImpl.cpp
 //
 //
 Syslog 
-//| where Computer in ("datasource") and Facility == "local5"
+\\| where Computer in ("datasource") and Facility == "local5"
 | extend parser = extract_all(@'^([A-Z]+)\s\"([0-9\.\-\s\:GMT]+)\"\s(\S+)\s([\w]+)\:(\d+)\s(\d+)\s(\d+)\s(\d+)\s\"text\=([\S\s]+)\"\sThread-(\d+)\s(.*)',dynamic([1,2,3,4,5,6,7,8,9,10,11]), SyslogMessage)
 | mv-expand todynamic(parser)
 | extend 
