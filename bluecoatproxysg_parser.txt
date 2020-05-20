@@ -17,6 +17,12 @@
 // Using functions in Azure monitor log queries: https:docs.microsoft.com/en-us/azure/azure-monitor/log-query/functions
 // Symantec Blue Coat ProxySG Access log format: https:portal.threatpulse.com/docs/sol/Solutions/Reference/accesslogformats-ref.htm
 //
+// LOG SAMPLES:
+// This parser assumes the raw log are formatted as follows:
+// 
+//      2020-05-01 23:07:37 628 10.52.249.163 user67 - - OBSERVED "Web Ads/Analytics" -  200 TCP_TUNNELED CONNECT - tcp gmtdmp.mookie1.com 443 / - - "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36" 10.10.10.10 1601 1586 - "none" "none" 3128 Ambiguous%20-%20Special%20Use 2
+//      2020-05-01 23:07:33 2765 10.180.244.18 user9 - - OBSERVED "WhiteList;Web Ads/Analytics" -  200 TCP_TUNNELED CONNECT - tcp pagead2.googlesyndication.com 443 / - - "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36" 10.10.10.10 4269 1474 - "none" "none" 3128 Ambiguous%20-%20Special%20Use 2
+//
 //
 Syslog
 //| where Computer in ("datasource") and Facility == "local0"
