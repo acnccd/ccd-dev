@@ -1,4 +1,5 @@
 // Title:           Infoblox NIOS Data Parser
+// Author:          Microsoft
 // Version:         1.0
 // Last Updated:    05/14/2020
 // Comment:         Inital Release
@@ -14,7 +15,7 @@
 // 4. Function App usually take 10-15 minutes to activate. You can then use Function Alias for other queries
 //
 // REFERENCES: 
-// Using functions in Azure monitor log queries: https://docs.microsoft.com/en-us/azure/azure-monitor/log-query/functions
+// Using functions in Azure monitor log queries: https://docs.microsoft.com/azure/azure-monitor/log-query/functions
 // Infoblox NIOS logging formats: https://docs.infoblox.com/display/NAG8/Using+a+Syslog+Server
 //
 // LOG SAMPLES:
@@ -25,18 +26,20 @@
 //
 //
 let RawData = Syslog 
-    //| where Computer in ("datasource") and Facility == "local6"
-    | extend Parser = extract_all(@"^([a-zA-Z]{3})\s(\d+)\s(\d{2}:\d{2}:\d{2})\s(\S+)\s([a-z_]+)(\[(\d+)\]|\:)(\:\s)?([a-zA-Z-_]+)(\s\:)?(.*)", dynamic([1,2,3,4,5,6,7,8,9,10,11]), SyslogMessage)
+    | where Computer in ("datasource") and Facility == "local6"
+    | extend Parser = extract_all(@"^([a-zA-Z]{3}\s\d{2}\s[0-9\:]+)\s(\S+)\s([a-z_]+)(\[(\d+)\]|\:)(\:\s)?(.*)", dynamic([1,2,3,4,5,6,7]), SyslogMessage)
     | mv-expand todynamic(Parser)
-    | extend month = tostring(Parser[0]), 
-        day = toint(Parser[1]), 
-        timevalue = tostring(Parser[2]), 
-        ServerIP = tostring(Parser[3]), 
-        LogType = tostring(Parser[4]), 
-        PID = toint(Parser[6]),
-        Type = tostring(Parser[8]),
-        RawData_subString = tostring(Parser[10])
-    | project-away Parser;
+    | extend logTime = tostring(Parser[0]), 
+        ServerIP = tostring(Parser[1]), 
+        LogType = tostring(Parser[2]), 
+        PID = toint(Parser[4]),
+        subString = tostring(Parser[6])
+    | extend Parser2 = extract_all(@"^(\d{2}\-[a-zA-Z]{3}\-\d{4}\s[0-9\.\:]+)?\s?([a-zA-Z-_]+)(\s|\:)?(.*)", dynamic([1,2,3,4]), subString)
+    | mv-expand todynamic(Parser2)
+    | extend responseTime = todatetime(Parser2[0]),
+            Type = tostring(Parser2[1]),
+            RawData_subString = tostring(Parser2[3])
+    | project-away Parser,Parser2,subString;
 let dhcpdiscover = RawData
     | where LogType == "dhcpd" and Type == "DHCPDISCOVER"
     | extend dhcpdiscover = extract_all(@"\w+\s((\S+)(\s\(\S+\))?)\s\w+\s(\S+)\sTransID\s([a-z0-9]+)\:?(\suid\s(\S+))?(\snetwork\s(\S+)\:)?\s?(.*)?", dynamic([1,2,3,4,5,6,7,8,9,10]), RawData_subString)
@@ -175,27 +178,31 @@ let dnszone = RawData
     | where LogType == "named" and Type == "zone"
     | extend dnszone = extract_all(@"([a-z0-9\.\-]+)\/([A-Z]+)\:(\s[A-Z]+)?\s(\w+\s\w+)\s(for\s\'(\S+)?\':)?((\d+)\.?)?(\s(\with\s|(\d+)\sIN\s)([A-Z]+)\s)?(\(?serial\s(\d+)\)?)?(.*)", dynamic([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]), RawData_subString)
     | mv-expand todynamic(dnszone)
-    | extend zone = tostring(dnszone[0]),
+    | extend Zone = tostring(dnszone[0]),
         Action = tostring(dnszone[3]),
-        Client_HostName = tostring(dnszone[5]),
+        Client_Hostname = tostring(dnszone[5]),
         TransID = tostring(dnszone[7]),
         Serial = tostring(dnszone[13]),
         TTL = tostring(dnszone[10]),
-        QueryType = tostring(dnszone[11])
+        RecordType = tostring(dnszone[11])
     | extend dnszone_substring = extract_all(@"\s?([a-zA-Z0-9\.\-\_]+)\.\s(.*)", dynamic([1,2]),tostring(dnszone[14]))
     | mv-expand todynamic(dnszone_substring)
-    | extend Hostname = tostring(dnszone_substring[0]),
+    | extend Host = tostring(dnszone_substring[0]),
         Message = tostring(dnszone_substring[1])
     | project-away RawData_subString, dnszone_substring, dnszone;
 let dnsclient = RawData 
     | where LogType == "named" and Type == "client"
-    | extend dnsclient = extract_all(@"(\S+)\s(\S+)\#(\d+)(\:\s|\/)([\w\s\:]+)\s(\'(\S+)\')?(.*)",dynamic([1,2,3,4,5,6,7,8]), RawData_subString)
+    | extend dnsclient = extract_all(@"^(\@[a-z0-9]+\s)?([0-9\.]+)\#(\d+)(\s\((\S+)\))?\:\sview\s(\S+)\:\s((UDP|TCP)\:\s?)??query\:\s(\S+)\s(\S+)\s(\S+)(\sresponse:\s([A-Z]+))?\s(\S+)(.*)",dynamic([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]), RawData_subString)
     | mv-expand todynamic(dnsclient)
-    | extend Client_IP= tostring(dnsclient[1]),
+    | extend Client_IP = tostring(dnsclient[1]),
         Port = tostring(dnsclient[2]),
-        Action = tostring(dnsclient[4]),
-        Zone = tostring(dnsclient[6]),
-        Message = tostring(dnsclient[7])
+        Protocol = tostring(dnsclient[7]),
+        QueryDomainName = tostring(dnsclient[8]),
+        ClassName = tostring(dnsclient[9]),
+        RecordType = tostring(dnsclient[10]),
+        ResponseCode = tostring(dnsclient[12]),
+        Flag = tostring(dnsclient[13]),
+        Message = tostring(dnsclient[14])
     | project-away RawData_subString, dnsclient;
 let dnsgss = RawData
     | where LogType == "named" and Type == "gss_accept_sec_context"
