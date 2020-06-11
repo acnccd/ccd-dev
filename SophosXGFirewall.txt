@@ -1,0 +1,78 @@
+// Title:           Sophos XG Firewall Data Parser
+// Author:          Microsoft
+// Version:         1.0
+// Last Updated:    06/04/2020
+// Comment:         Inital Release
+//  
+// DESCRIPTION:
+// This parser takes raw Sophos XG Firewall logs from a Syslog data stream and parses the data into a normalized schema
+//
+// USAGE:
+// 1. Open Log Analytics/Azure Sentinel Logs blade. Copy the query below and paste into the Logs query window. 
+// 2. In the query window, on the second line of the query, enter the hostname(s) of your Sophos XG Firewall device(s) and any other unique identifiers for the logstream. 
+//    For example: | where Computer in ("server1, server2") and Facility == "local7"
+// 3. Click the Save button above the query. A pane will appear on the right, select "as Function" from the drop down. Enter a Function Name.
+//    In order for the Sophos XG Firewall logs to work with pre-built queries and workbooks the Function Alias must be set to - SophosXGFirewall
+// 4. Function App usually take 10-15 minutes to activate. You can then use Function Alias for other queries
+//
+// REFERENCES: 
+// Using functions in Azure monitor log queries: https://docs.microsoft.com/azure/azure-monitor/log-query/functions
+// 
+// 
+//      
+//      
+//
+//
+Syslog
+| where Computer in ("datasource") and Facility == "local0"
+| extend Device = extract(@'device=\"(\S+)\"', 1, SyslogMessage),
+Date = extract(@'date=(\S+)', 1, SyslogMessage),
+Time = extract(@'time=(\S+)', 1, SyslogMessage),
+Timezone = extract(@'timezone=\"(\S+)\"', 1, SyslogMessage),
+Device_Name = extract(@'device_name=\"(\S+)\"', 1, SyslogMessage),
+Device_Id = extract(@'device_id=(\S+)', 1, SyslogMessage),
+Log_Id = extract(@'log_id=(\S+)', 1, SyslogMessage),
+Log_Type = extract(@'log_type=\"(\S+)\"', 1, SyslogMessage),
+Log_Component = extract(@'log_component=\"(\S+)\"', 1, SyslogMessage),
+Log_Subtype = extract(@'log_subtype=\"(\S+)\"', 1, SyslogMessage),
+Status = extract(@'status=\"(\S+)\"', 1, SyslogMessage),
+Priority = extract(@'priority=(\S+)', 1, SyslogMessage),
+Duration = extract(@'duration=(\S+)', 1, SyslogMessage),
+FW_Rule_Id = extract(@'fw_rule_id=(\S+)', 1, SyslogMessage),
+Policy_Type = extract(@'policy_type=(\S+)', 1, SyslogMessage),
+User_Name = extract(@'user_name=\"(\S+)\"', 1, SyslogMessage),
+User_GP = extract(@'user_gp=\"(\S+)\"', 1, SyslogMessage),
+IAP = extract(@'iap=(\S+)', 1, SyslogMessage),
+IPS_Policy_Id = extract(@'ips_policy_id=(\S+)', 1, SyslogMessage),
+Appfilter_Policy_Id = extract(@'appfilter_policy_id=(\S+)', 1, SyslogMessage),
+Application = extract(@'application=\"(\S+)\"', 1, SyslogMessage),
+Application_Risk = extract(@'application_risk=(\S+)', 1, SyslogMessage),
+Application_Technology = extract(@'application_technology=\"(\S+)\"', 1, SyslogMessage),
+Application_Category = extract(@'application_category=\"(\S+)\"', 1, SyslogMessage),
+In_Interface = extract(@'in_interface=\"(\S+)\"', 1, SyslogMessage),
+Out_Interface = extract(@'out_interface=\"(\S+)\"', 1, SyslogMessage),
+Src_Mac = extract(@'src_mac=(\S+)', 1, SyslogMessage),
+Src_Ip = extract(@'src_ip=(\S+)', 1, SyslogMessage),
+Src_Country_Code = extract(@'src_country_code=(\S+)', 1, SyslogMessage),
+Dst_IP = extract(@'dst_ip=(\S+)', 1, SyslogMessage),
+Dst_Country_Code = extract(@'dst_country_code=(\S+)', 1, SyslogMessage),
+Protocol = extract(@'protocol=\"(\S+)\"', 1, SyslogMessage),
+Src_Port = extract(@'src_port=(\S+)', 1, SyslogMessage),
+Dst_Port = extract(@'dst_port=(\S+)', 1, SyslogMessage),
+Sent_Pkts = extract(@'sent_pkts=(\S+)', 1, SyslogMessage),
+Recv_Pkts = extract(@'recv_pkts=(\S+)', 1, SyslogMessage),
+Sent_Bytes = extract(@'sent_bytes=(\S+)', 1, SyslogMessage),
+Recv_Bytes = extract(@'recv_bytes=(\S+)', 1, SyslogMessage),
+Tran_Src_IP = extract(@'tran_src_ip=(\S+)', 1, SyslogMessage),
+Tran_Src_Port = extract(@'tran_src_port=(\S+)', 1, SyslogMessage),
+Tran_Dst_IP = extract(@'tran_dst_ip=(\S+)', 1, SyslogMessage),
+Tran_Dst_Port = extract(@'tran_dst_port=(\S+)', 1, SyslogMessage),
+Srczonetype = extract(@'srczonetype=\"(\S+)\"', 1, SyslogMessage),
+Srczone = extract(@'srczone=\"(\S+)\"', 1, SyslogMessage),
+Dstzonetype = extract(@'dstzonetype=\"(\S+)\"', 1, SyslogMessage),
+Dstzone = extract(@'dstzone=\"(\S+)\"', 1, SyslogMessage),
+Dir_Disp = extract(@'dir_disp=\"(\S+)\"', 1, SyslogMessage),
+Connevent = extract(@'connevent=\"(\S+)\"', 1, SyslogMessage),
+ConnID = extract(@'connid=\"(\S+)\"', 1, SyslogMessage),
+VconnID = extract(@'vconnid=\"(\S+)\"', 1, SyslogMessage),
+HB_Health = extract(@'hb_health=\"(\S+)\"', 1, SyslogMessage)
