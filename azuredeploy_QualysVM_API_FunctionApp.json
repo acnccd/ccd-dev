@@ -180,7 +180,7 @@
                           "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
                           "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/chicduong/ccd-dev/blob/master/AzureFunctionQualysVM.zip"
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/chicduong/ccd-dev/blob/master/AzureFunctionQualysVM.zip?raw=tru"
                                    } 
                   }
               ]
