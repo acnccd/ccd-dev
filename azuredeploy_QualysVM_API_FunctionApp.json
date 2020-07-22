@@ -36,25 +36,25 @@
           }
       },
       "variables": {
-          "FunctionName": "[concat(toLower(variable('FunctionName')),'-', uniqueString(resourceGroup().id))]"
+          "FunctionName": "[concat(toLower(variables('FunctionName')),'-', uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
               "type": "Microsoft.Insights/components",
               "apiVersion": "2015-05-01",
-              "name": "[variable('FunctionName')]",
+              "name": "[variables('FunctionName')]",
               "location": "[resourceGroup().location]",
               "kind": "web",
               "properties": {
                   "Application_Type": "web",
-                  "ApplicationId": "[variable('FunctionName')]"
+                  "ApplicationId": "[variables('FunctionName')]"
               }
           },
           
           {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
-              "name": "[tolower(variable('FunctionName'))]",
+              "name": "[tolower(variables('FunctionName'))]",
               "location": "[resourceGroup().location]",
               "sku": {
                   "name": "Standard_LRS",
@@ -89,7 +89,7 @@
           {
               "type": "Microsoft.Web/serverfarms",
               "apiVersion": "2018-02-01",
-              "name": "[variable('FunctionName')]",
+              "name": "[variables('FunctionName')]",
               "location": "[resourceGroup().location]",
               "sku": {
                   "name": "Y1",
@@ -97,7 +97,7 @@
               },
               "kind": "functionapp",
               "properties": {
-                  "name": "[variable('FunctionName')]",
+                  "name": "[variables('FunctionName')]",
                   "workerSize": "0",
                   "workerSizeId": "0",
                   "numberOfWorkers": "1"
@@ -106,9 +106,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(variable('FunctionName'), '/default')]",
+              "name": "[concat(variables('FunctionName'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variable('FunctionName')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variables('FunctionName')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -127,9 +127,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(variable('FunctionName'), '/default')]",
+              "name": "[concat(variables('FunctionName'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variable('FunctionName')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variables('FunctionName')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -145,20 +145,20 @@
           {
               "type": "Microsoft.Web/sites",
               "apiVersion": "2018-11-01",
-              "name": "[variable('FunctionName')]",
+              "name": "[variables('FunctionName')]",
               "location": "[resourceGroup().location]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variable('FunctionName')))]",
-                  "[resourceId('Microsoft.Web/serverfarms', variable('FunctionName'))]",
-                  "[resourceId('Microsoft.Insights/components', variable('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(variables('FunctionName')))]",
+                  "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName'))]",
+                  "[resourceId('Microsoft.Insights/components', variables('FunctionName'))]"
               ],
               "kind": "functionapp",
               "identity": {
                   "type": "SystemAssigned"
               },
               "properties": {
-                  "name": "[variable('FunctionName')]",
-                  "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variable('FunctionName'))]",
+                  "name": "[variables('FunctionName')]",
+                  "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName'))]",
                   "httpsOnly": true,
                   "clientAffinityEnabled": true,
                    "alwaysOn": true
@@ -169,16 +169,16 @@
                       "type": "config",
                       "name": "appsettings",
                       "dependsOn": [
-                          "[concat('Microsoft.Web/sites/', variable('FunctionName'))]"
+                          "[concat('Microsoft.Web/sites/', variables('FunctionName'))]"
                       ],
                       "properties": {
                           "FUNCTIONS_EXTENSION_VERSION": "~3",
                           "FUNCTIONS_WORKER_RUNTIME": "powershell",
-                          "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.insights/components', variable('FunctionName')), '2015-05-01').InstrumentationKey]",
-                          "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('microsoft.insights/components', variable('FunctionName')), '2015-05-01').ConnectionString]",
-                          "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variable('FunctionName')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variable('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
-                          "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variable('FunctionName')),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variable('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
-                          "WEBSITE_CONTENTSHARE": "[toLower(variable('FunctionName'))]",
+                          "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.insights/components', variables('FunctionName')), '2015-05-01').InstrumentationKey]",
+                          "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('microsoft.insights/components', variables('FunctionName')), '2015-05-01').ConnectionString]",
+                          "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
+                          "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
+                          "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
                           "workspaceID": "[parameters('WorkspaceID')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
                           "apiUsername": "[parameters('APIUsername')]",
@@ -194,23 +194,23 @@
           {
               "type": "Microsoft.Web/sites/hostNameBindings",
               "apiVersion": "2018-11-01",
-              "name": "[concat(variable('FunctionName'), '/', variable('FunctionName'), '.azurewebsites.net')]",
+              "name": "[concat(variables('FunctionName'), '/', variables('FunctionName'), '.azurewebsites.net')]",
               "location": "[resourceGroup().location]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Web/sites', variable('FunctionName'))]"
+                  "[resourceId('Microsoft.Web/sites', variables('FunctionName'))]"
               ],
               "properties": {
-                  "siteName": "[variable('FunctionName')]",
+                  "siteName": "[variables('FunctionName')]",
                   "hostNameType": "Verified"
               }
           },
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(variable('FunctionName'), '/default/azure-webjobs-hosts')]",
+              "name": "[concat(variables('FunctionName'), '/default/azure-webjobs-hosts')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variable('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', variable('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('FunctionName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -219,10 +219,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(variable('FunctionName'), '/default/azure-webjobs-secrets')]",
+              "name": "[concat(variables('FunctionName'), '/default/azure-webjobs-secrets')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variable('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', variable('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('FunctionName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -231,10 +231,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
               "apiVersion": "2019-06-01",
-              "name": "[concat(variable('FunctionName'), '/default/', tolower(variable('FunctionName')))]",
+              "name": "[concat(variables('FunctionName'), '/default/', tolower(variables('FunctionName')))]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', variable('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', variable('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', variables('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('FunctionName'))]"
               ],
               "properties": {
                   "shareQuota": 5120
@@ -242,4 +242,4 @@
           }
       ]
   }
- 
+  
