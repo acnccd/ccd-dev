@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
       "parameters": {
+         "storageAccount": {
+              "type": "string"
+          },
           "FunctionName": {
               "defaultValue": "QualysVMIngestion",
               "type": "string"
@@ -49,7 +52,7 @@
           {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
-              "name": "[tolower(parameters('FunctionName'))]",
+              "name": "[tolower(parameters('storageAccount'))]",
               "location": "[resourceGroup().location]",
               "sku": {
                   "name": "Standard_LRS",
@@ -101,9 +104,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default')]",
+              "name": "[concat(parameters('storageAccount'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('FunctionName')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('storageAccount')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -122,9 +125,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default')]",
+              "name": "[concat(parameters('storageAccount'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('FunctionName')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('storageAccount')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -201,10 +204,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-hosts')]",
+              "name": "[concat(parameters('storageAccount'), '/default/azure-webjobs-hosts')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -213,10 +216,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-secrets')]",
+              "name": "[concat(parameters('storageAccount'), '/default/azure-webjobs-secrets')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -225,10 +228,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default/', tolower(parameters('FunctionName')))]",
+              "name": "[concat(parameters('storageAccount'), '/default/', tolower(parameters('storageAccount')))]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
               ],
               "properties": {
                   "shareQuota": 5120
