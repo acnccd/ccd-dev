@@ -106,7 +106,7 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('FunctionName'), '/default')]",
+              "name": "[concat(variables('storageName'), '/default')]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
               ],
@@ -129,7 +129,7 @@
               "apiVersion": "2019-06-01",
               "name": "[concat(variables('storageName'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts',  variables('storageName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
