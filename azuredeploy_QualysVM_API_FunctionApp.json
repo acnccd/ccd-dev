@@ -36,7 +36,7 @@
           }
       },
       "variables": {
-          "storageName": "[concat("qualysvm", uniqueString(resourceGroup().id))]"
+          "storageName": "[concat('qualysvm', uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
