@@ -3,6 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
          "storageAccount": {
+              "defaultValue": "[concat(tolower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
               "type": "string"
           },
           "FunctionName": {
