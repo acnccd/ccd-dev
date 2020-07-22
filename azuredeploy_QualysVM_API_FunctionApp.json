@@ -6,10 +6,6 @@
               "defaultValue": "QualysVMIngestion",
               "type": "string"
           },  
-          "storageAccount": {
-              "type": "string",
-              "defaultValue": "[uniqueString(FunctionName().id))]"
-          },
           "WorkspaceID": {
               "type": "string",
               "defaultValue": "<workspaceID>"
@@ -28,11 +24,15 @@
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<API Server URL>/api/2.0/fo/asset/host/vm/detection/?action=list&detection_processed_after="
+              "defaultValue": "https://<API Server URL>/api/2.0/fo/asset/host/vm/detection/?action=list&vm_processed_after="
+          },
+          "FilterParameters": {
+              "type": "string",
+              "defaultValue": "&truncation_limit=1000"
           },
           "TimeInterval": {
               "type": "string",
-              "defaultValue": "60"
+              "defaultValue": "5"
           }
       },
       "variables": {
@@ -53,7 +53,7 @@
           {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
-              "name": "[tolower(parameters('storageAccount'))]",
+              "name": "[tolower(parameters('FunctionName'))]",
               "location": "[resourceGroup().location]",
               "sku": {
                   "name": "Standard_LRS",
@@ -105,9 +105,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('storageAccount'), '/default')]",
+              "name": "[concat(parameters('FunctionName'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('storageAccount')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('FunctionName')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -126,9 +126,9 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('storageAccount'), '/default')]",
+              "name": "[concat(parameters('FunctionName'), '/default')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('storageAccount')))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', tolower(parameters('FunctionName')))]"
               ],
               "sku": {
                   "name": "Standard_LRS",
@@ -183,8 +183,9 @@
                           "apiUsername": "[parameters('APIUsername')]",
                           "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
+                          "filterParameters": "[parameters('FilterParameters')]",
                           "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/chicduong/ccd-dev/blob/master/AzureFunctionQualysVM.zip?raw=true"
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelqualysvmazurefunctionzip"
                                    } 
                   }
               ]
@@ -205,10 +206,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('storageAccount'), '/default/azure-webjobs-hosts')]",
+              "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-hosts')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -217,10 +218,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('storageAccount'), '/default/azure-webjobs-secrets')]",
+              "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-secrets')]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -229,10 +230,10 @@
           {
               "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
               "apiVersion": "2019-06-01",
-              "name": "[concat(parameters('storageAccount'), '/default/', tolower(parameters('storageAccount')))]",
+              "name": "[concat(parameters('FunctionName'), '/default/', tolower(parameters('FunctionName')))]",
               "dependsOn": [
-                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('storageAccount'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('FunctionName'), 'default')]",
+                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
               ],
               "properties": {
                   "shareQuota": 5120
