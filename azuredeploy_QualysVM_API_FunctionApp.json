@@ -7,8 +7,8 @@
               "type": "string"
           },  
           "storageAccount": {
+              "type": "string",
               "defaultValue": "[concat(tolower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
-              "type": "string"
           },
           "WorkspaceID": {
               "type": "string",
