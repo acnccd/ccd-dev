@@ -36,7 +36,7 @@
           }
       },
       "variables": {
-          "FunctionName": "[concat(toLower(variables('FunctionName')),'-', uniqueString(resourceGroup().id))]"
+          "FunctionName": "[concat(toLower(parameters('FunctionName')),'-', uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
