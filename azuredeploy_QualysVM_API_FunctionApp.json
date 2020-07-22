@@ -210,7 +210,7 @@
               "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-hosts')]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -222,7 +222,7 @@
               "name": "[concat(parameters('FunctionName'), '/default/azure-webjobs-secrets')]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
               ],
               "properties": {
                   "publicAccess": "None"
@@ -234,7 +234,7 @@
               "name": "[concat(parameters('FunctionName'), '/default/', tolower(parameters('FunctionName')))]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts/fileServices', parameters('FunctionName'), 'default')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', parameters('FunctionName'))]"
+                  "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
               ],
               "properties": {
                   "shareQuota": 5120
