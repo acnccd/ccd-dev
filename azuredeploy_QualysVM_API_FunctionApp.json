@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "OktaSSO",
+              "defaultValue": "Proofpoint",
               "type": "string"
           },  
           "WorkspaceID": {
@@ -14,21 +14,22 @@
               "type": "string",
               "defaultValue": "<workspaceKey>"
           },
-          "APIToken": {
+          "APIUsername": {
               "type": "string",
-              "defaultValue": "<apiToken>"
+              "defaultValue": "<apiUsername>"
+          },
+          "APIPassword": {
+              "type": "string",
+              "defaultValue": "<apiPassword>"
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<OktaDomain>/api/v1/logs?since="
-          },
-          "TimeInterval": {
-              "type": "string",
-              "defaultValue": "5"
+              "defaultValue": "https://tap-api-v2.proofpoint.com/v2/siem/all?format=json&sinceSeconds=300"
           }
+  
       },
       "variables": {
-          "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
+           "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
@@ -172,11 +173,10 @@
                           "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
                           "workspaceID": "[parameters('WorkspaceID')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
-                          "apiToken": "[parameters('APIToken')]",
+                          "apiUsername": "[parameters('APIUsername')]",
+                          "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
-                          "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentineloktafunctionzip"
-
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelproofpointtapazurefunctionzip"
                                    } 
                   }
               ]
