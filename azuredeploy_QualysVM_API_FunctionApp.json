@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "Proofpoint",
+              "defaultValue": "OktaSSO",
               "type": "string"
           },  
           "WorkspaceID": {
@@ -14,22 +14,21 @@
               "type": "string",
               "defaultValue": "<workspaceKey>"
           },
-          "APIUsername": {
+          "APIToken": {
               "type": "string",
-              "defaultValue": "<apiUsername>"
-          },
-          "APIPassword": {
-              "type": "string",
-              "defaultValue": "<apiPassword>"
+              "defaultValue": "<apiToken>"
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://tap-api-v2.proofpoint.com/v2/siem/all?format=json&sinceSeconds=300"
+              "defaultValue": "https://<OktaDomain>/api/v1/logs?since="
+          },
+          "TimeInterval": {
+              "type": "string",
+              "defaultValue": "5"
           }
-  
       },
       "variables": {
-           "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
+          "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
@@ -173,10 +172,11 @@
                           "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
                           "workspaceID": "[parameters('WorkspaceID')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
-                          "apiUsername": "[parameters('APIUsername')]",
-                          "apiPassword": "[parameters('APIPassword')]",
+                          "apiToken": "[parameters('APIToken')]",
                           "uri": "[parameters('Uri')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelproofpointtapazurefunctionzip"
+                          "timeInterval": "[parameters('TimeInterval')]",
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentineloktafunctionzip"
+
                                    } 
                   }
               ]
