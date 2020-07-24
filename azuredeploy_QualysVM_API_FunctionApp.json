@@ -3,32 +3,36 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "QualysVM",
+              "defaultValue": "CarbonBlack",
               "type": "string"
           },  
-          "WorkspaceID": {
+          "WorkspaceId": {
               "type": "string",
-              "defaultValue": "<workspaceID>"
+              "defaultValue": "<workspaceId>"
           },
           "WorkspaceKey": {
               "type": "string",
               "defaultValue": "<workspaceKey>"
           },
-          "APIUsername": {
+          "APIKey": {
               "type": "string",
-              "defaultValue": "<apiUsername>"
+              "defaultValue": "<apiKey>"
           },
-          "APIPassword": {
+          "APIId": {
               "type": "string",
-              "defaultValue": "<apiPassword>"
+              "defaultValue": "<apiId>"
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<API Server URL>/api/2.0/fo/asset/host/vm/detection/?action=list&vm_processed_after="
+              "defaultValue": "https://<API URL>"
           },
-          "FilterParameters": {
+          "SIEMApiKey": {
               "type": "string",
-              "defaultValue": "&truncation_limit=1000"
+              "defaultValue": "<Optional>"
+          },
+          "SIEMApiID": {
+              "type": "string",
+              "defaultValue": "<Optional>"
           },
           "TimeInterval": {
               "type": "string",
@@ -36,7 +40,7 @@
           }
       },
       "variables": {
-          "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
+           "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
@@ -179,14 +183,15 @@
                           "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
                           "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
                           "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
-                          "workspaceID": "[parameters('WorkspaceID')]",
+                          "workspaceId": "[parameters('WorkspaceId')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
-                          "apiUsername": "[parameters('APIUsername')]",
-                          "apiPassword": "[parameters('APIPassword')]",
+                          "apiKey": "[parameters('APIKey')]",
+                          "apiId": "[parameters('APIId')]",
                           "uri": "[parameters('Uri')]",
-                          "filterParameters": "[parameters('FilterParameters')]",
                           "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelqualysvmazurefunctionzip"
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelcarbonblackazurefunctionzip",
+                          "SIEMapiKey":"[parameters('SIEMapiKey')]",
+                          "SIEMapiId":"[parameters('SIEMapiId')]"
                                    } 
                   }
               ]
