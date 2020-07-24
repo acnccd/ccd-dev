@@ -3,36 +3,24 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "CarbonBlack",
+              "defaultValue": "OktaSSO",
               "type": "string"
           },  
-          "WorkspaceId": {
+          "WorkspaceID": {
               "type": "string",
-              "defaultValue": "<workspaceId>"
+              "defaultValue": "<workspaceID>"
           },
           "WorkspaceKey": {
               "type": "string",
               "defaultValue": "<workspaceKey>"
           },
-          "APIKey": {
+          "APIToken": {
               "type": "string",
-              "defaultValue": "<apiKey>"
-          },
-          "APIId": {
-              "type": "string",
-              "defaultValue": "<apiId>"
+              "defaultValue": "<apiToken>"
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<API URL>"
-          },
-          "SIEMApiKey": {
-              "type": "string",
-              "defaultValue": "<Optional>"
-          },
-          "SIEMApiID": {
-              "type": "string",
-              "defaultValue": "<Optional>"
+              "defaultValue": "https://<OktaDomain>/api/v1/logs?since="
           },
           "TimeInterval": {
               "type": "string",
@@ -40,7 +28,7 @@
           }
       },
       "variables": {
-           "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
+          "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
@@ -54,7 +42,6 @@
                   "ApplicationId": "[variables('FunctionName')]"
               }
           },
-          
           {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
@@ -183,15 +170,13 @@
                           "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
                           "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', toLower(variables('FunctionName')),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', toLower(variables('FunctionName'))), '2019-06-01').keys[0].value, ';EndpointSuffix=core.windows.net')]",
                           "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
-                          "workspaceId": "[parameters('WorkspaceId')]",
+                          "workspaceID": "[parameters('WorkspaceID')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
-                          "apiKey": "[parameters('APIKey')]",
-                          "apiId": "[parameters('APIId')]",
+                          "apiToken": "[parameters('APIToken')]",
                           "uri": "[parameters('Uri')]",
                           "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentinelcarbonblackazurefunctionzip",
-                          "SIEMapiKey":"[parameters('SIEMapiKey')]",
-                          "SIEMapiId":"[parameters('SIEMapiId')]"
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentineloktafunctionzip"
+
                                    } 
                   }
               ]
