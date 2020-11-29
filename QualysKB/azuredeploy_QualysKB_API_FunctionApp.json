@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "QualysVM",
+              "defaultValue": "QualysKB",
               "type": "string"
           },  
           "WorkspaceID": {
@@ -26,7 +26,7 @@
               "type": "string",
               "defaultValue": "https://<API Server URL>/api/2.0/fo"
           },
-          "FilterParameters": {
+          "FilterParameters(Optional)": {
               "type": "string",
               "defaultValue": ""
           }
@@ -145,7 +145,7 @@
               "location": "[resourceGroup().location]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts', tolower(variables('FunctionName')))]",
-                  "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName'))]",
+                  "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName '))]",
                   "[resourceId('Microsoft.Insights/components', variables('FunctionName'))]"
               ],
               "kind": "functionapp",
@@ -180,8 +180,8 @@
                           "apiUsername": "[parameters('APIUsername')]",
                           "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
-                          "filterParameters": "[parameters('FilterParameters')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/rvanaparthi/QualysKB/blob/main/azurearmtemplates/AzureFunctionQualysKB.zip?raw=true"
+                          "filterParameters": "[parameters('FilterParameters(Optional)')]",
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/chicduong/ccd-dev/blob/master/QualysKB/AzureFunctionQualysKB.zip?raw=true"
                                    } 
                   }
               ]
