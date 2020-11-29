@@ -73,10 +73,16 @@ function GetStartTime($CheckpointFile, $timeInterval){
     $firstStartTimeRecord = [datetime]::UtcNow.AddMinutes(-$timeInterval).ToString("yyyy-MM-ddTHH:mm:ssZ")
     
     if ([System.IO.File]::Exists($CheckpointFile) -eq $false) {
+
+        Connect-AzAccount -Identity
+
         $CheckpointLog = @{}
         $CheckpointLog.Add('LastSuccessfulTime', $firstStartTimeRecord)        
         $CheckpointCSV = $CheckpointLog.GetEnumerator() | Select-Object -Property Key,Value | ConvertTo-Csv -NoTypeInformation
         $CheckpointCSV | Out-File -File $CheckpointFile 
+
+        Disconnect-AzAccount
+        
         return $firstStartTimeRecord 
     }
     else {
