@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "OktaSSO",
+              "defaultValue": "QualysVM",
               "type": "string"
           },  
           "WorkspaceID": {
@@ -14,21 +14,25 @@
               "type": "string",
               "defaultValue": "<workspaceKey>"
           },
-          "APIToken": {
+          "APIUsername": {
               "type": "string",
-              "defaultValue": "<apiToken>"
+              "defaultValue": "<apiUsername>"
+          },
+          "APIPassword": {
+              "type": "string",
+              "defaultValue": "<apiPassword>"
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<OktaDomain>/api/v1/logs?since="
+              "defaultValue": "https://<API Server URL>/api/2.0/fo"
           },
-          "TimeInterval": {
+          "FilterParameters": {
               "type": "string",
-              "defaultValue": "5"
+              "defaultValue": ""
           }
       },
       "variables": {
-          "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
+           "FunctionName": "[concat(toLower(parameters('FunctionName')), uniqueString(resourceGroup().id))]"
       },
       "resources": [
           {
@@ -42,6 +46,7 @@
                   "ApplicationId": "[variables('FunctionName')]"
               }
           },
+          
           {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
@@ -172,11 +177,11 @@
                           "WEBSITE_CONTENTSHARE": "[toLower(variables('FunctionName'))]",
                           "workspaceID": "[parameters('WorkspaceID')]",
                           "workspaceKey": "[parameters('WorkspaceKey')]",
-                          "apiToken": "[parameters('APIToken')]",
+                          "apiUsername": "[parameters('APIUsername')]",
+                          "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
-                          "timeInterval": "[parameters('TimeInterval')]",
-                          "WEBSITE_RUN_FROM_PACKAGE": "https://aka.ms/sentineloktafunctionzip"
-
+                          "filterParameters": "[parameters('FilterParameters')]",
+                          "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/rvanaparthi/QualysKB/blob/main/azurearmtemplates/AzureFunctionQualysKB.zip?raw=true"
                                    } 
                   }
               ]
