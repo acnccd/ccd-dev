@@ -26,7 +26,7 @@
               "type": "string",
               "defaultValue": "https://<API Server URL>/api/2.0/fo"
           },
-          "FilterParameters\"Option\"": {
+          "OptionalFilterParameters": {
               "type": "string",
               "defaultValue": ""
           }
@@ -180,7 +180,7 @@
                           "apiUsername": "[parameters('APIUsername')]",
                           "apiPassword": "[parameters('APIPassword')]",
                           "uri": "[parameters('Uri')]",
-                          "filterParameters": "[parameters('FilterParameters(Optional)')]",
+                          "filterParameters": "[parameters('OptionalFilterParameters')]",
                           "WEBSITE_RUN_FROM_PACKAGE": "https://github.com/chicduong/ccd-dev/blob/master/QualysKB/AzureFunctionQualysKB.zip?raw=true"
                                    } 
                   }
