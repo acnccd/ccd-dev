@@ -75,7 +75,7 @@ function GetStartTime($CheckpointFile, $timeInterval){
     if ([System.IO.File]::Exists($CheckpointFile) -eq $false) {
         $CheckpointLog = @{}
         $CheckpointLog.Add('LastSuccessfulTime', $firstStartTimeRecord)        
-        $CheckpointLog.GetEnumerator() | Select-Object -Property Key,Value | Export-CSV -Path $CheckpointFile -NoTypeInformation
+        $CheckpointLog.GetEnumerator() | Select-Object -Property Key,Value | Export-CSV -Path $CheckpointFile -NoTypeInformation -Force
         return $firstStartTimeRecord 
     }
     else {
@@ -111,7 +111,7 @@ function QualysKB {
     $filterparameters = $env:filterParameters
     $Uri = $env:Uri
    
-    $startDate = GetStartTime -CheckpointFile $checkPointFile  -timeInterval $timeInterval
+    $startDate = GetStartTime -CheckpointFile $CheckPointFile  -timeInterval $timeInterval
     $hdrs = @{"X-Requested-With"="powershell"}  
     $base = "$Uri"
     $body = "action=login&username=$username&password=$password"  
