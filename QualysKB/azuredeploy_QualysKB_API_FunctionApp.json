@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
       "parameters": {
           "FunctionName": {
-              "defaultValue": "QualysKB",
+              "defaultValue": "QualysVM",
               "type": "string"
           },  
           "WorkspaceID": {
@@ -26,7 +26,7 @@
               "type": "string",
               "defaultValue": "https://<API Server URL>/api/2.0/fo"
           },
-          "OptionalFilterParameters": {
+          "(Optional)FilterParameters": {
               "type": "string",
               "defaultValue": ""
           }
@@ -145,7 +145,7 @@
               "location": "[resourceGroup().location]",
               "dependsOn": [
                   "[resourceId('Microsoft.Storage/storageAccounts', tolower(variables('FunctionName')))]",
-                  "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName '))]",
+                  "[resourceId('Microsoft.Web/serverfarms', variables('FunctionName'))]",
                   "[resourceId('Microsoft.Insights/components', variables('FunctionName'))]"
               ],
               "kind": "functionapp",
