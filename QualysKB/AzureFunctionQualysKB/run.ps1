@@ -75,7 +75,8 @@ function GetStartTime($CheckpointFile, $timeInterval){
     if ([System.IO.File]::Exists($CheckpointFile) -eq $false) {
         $CheckpointLog = @{}
         $CheckpointLog.Add('LastSuccessfulTime', $firstStartTimeRecord)        
-        $CheckpointLog.GetEnumerator() | Select-Object -Property Key,Value | Export-CSV -Path $CheckpointFile -NoTypeInformation -Force
+        $CheckpointCSV = $CheckpointLog.GetEnumerator() | Select-Object -Property Key,Value | ConvertTo-Csv -NoTypeInformation
+        $CheckpointCSV | Out-File -File $CheckpointFile 
         return $firstStartTimeRecord 
     }
     else {
