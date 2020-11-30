@@ -129,11 +129,15 @@ function QualysKB {
             }
             else {
   
+                $DiagnosisParsed = Html-ToText($response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].DIAGNOSIS."#cdata-section")
+                $ConsequenceParsed = Html-ToText($response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].CONSEQUENCE."#cdata-section")
+                $SolutionParsed = Html-ToText($response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].SOLUTION."#cdata-section")
+  
                 $obj = @{'QID'= $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].QID
                 'Title' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].TITLE."#cdata-section"
                 'Category' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].CATEGORY
-                'Consequence' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].CONSEQUENCE."#cdata-section"
-                'Diagnosis' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].DIAGNOSIS."#cdata-section"
+                'Consequence' = $ConsequenceParsed
+                'Diagnosis' = $DiagnosisParsed
                 'Last_Service_Modification_DateTime' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].LAST_SERVICE_MODIFICATION_DATETIME
                 'Patchable' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].PATCHABLE
                 'CVE_ID' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].CVE_LIST.CVE.ID."#cdata-section"
@@ -145,8 +149,8 @@ function QualysKB {
                 'Severity_Level' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].SEVERITY_LEVEL
                 'Software_Product' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].SOFTWARE_LIST.SOFTWARE.PRODUCT."#cdata-section"
                 'Software_Vendor' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].SOFTWARE_LIST.SOFTWARE.VENDOR."#cdata-section"
-                'Solution'  = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].SOLUTION."#cdata-section"
-                'Vuln_Type'  = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].VULN_TYPE
+                'Solution' = $SolutionParsed
+                'Vuln_Type' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].VULN_TYPE
                 'Discovery_Additional_Info' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].DISCOVERY.ADDITIONAL_INFO
                 'Discovery_Auth_Type' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].DISCOVERY.AUTH_TYPE_LIST.AUTH_TYPE
                 'Discovery_Remote' = $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN[$_].DISCOVERY.REMOTE
