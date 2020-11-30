@@ -100,7 +100,8 @@ function UpdateCheckpointTime($CheckpointFile, $LastSuccessfulTime){
 
 function QualysKB {
    
-    $CheckpointFile = "C:\home\site\QualysKBCheckpoint.csv"
+    $cwd = (Get-Location).Drive.Root
+    $CheckpointFile = "$($cwd)home\site\QualysKBCheckpoint.csv"
     $endTime = [datetime]::UtcNow
     $customerId = $env:workspaceId
     $sharedKey = $env:workspacekey
