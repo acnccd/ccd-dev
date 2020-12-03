@@ -97,7 +97,6 @@ function UpdateCheckpointTime($CheckpointFile, $LastSuccessfulTime){
     $checkpoints | Select-Object -Property Key,Value | Export-CSV -Path $CheckpointFile -NoTypeInformation
 }
 
-
 function QualysKB {
    
     $cwd = (Get-Location).Drive.Root
@@ -105,8 +104,8 @@ function QualysKB {
     $endTime = [datetime]::UtcNow
     $customerId = $env:workspaceId
     $sharedKey = $env:workspacekey
-    $username = $env:apiUsername
-    $password = $env:apiPassword
+    $username = [uri]::EscapeDataString($env:apiUsername)
+    $password = [uri]::EscapeDataString($env:apiPassword)
     $tableName = "QualysKB"
     $timeInterval = 5
     $filterparameters = $env:filterParameters
