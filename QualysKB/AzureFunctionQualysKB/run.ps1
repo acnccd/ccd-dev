@@ -97,6 +97,14 @@ function UpdateCheckpointTime($CheckpointFile, $LastSuccessfulTime){
     $checkpoints | Select-Object -Property Key,Value | Export-CSV -Path $CheckpointFile -NoTypeInformation
 }
 
+function UrlValidation{
+    Param(
+        [ValidatePattern('^https:\/\/qualysapi.([\w\.]+)\/api\/2.0$')]
+        [string]$Uri
+    )
+    return $true
+}
+
 function QualysKB {
    
     $cwd = (Get-Location).Drive.Root
@@ -109,12 +117,12 @@ function QualysKB {
     $tableName = "QualysKB"
     $timeInterval = 5
     $filterparameters = $env:filterParameters
-
     $Uri = $env:Uri
-    $UriValidation = $Uri | Select-String -AllMatches '^https:\/\/qualysapi.([\w\.]+)\/api\/2.0$'
 
-    if($null -ne $UriValidation){
-        throw "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
+    # Validate Uri
+    if((UrlValidation -Uri $Uri) -ne $true){
+        Write-Output "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
+        exit
     }
     
     # If filter parameters are defined, add a "&" prefix
