@@ -119,12 +119,12 @@ function QualysKB {
     
     $startDate = GetStartTime -CheckpointFile $CheckPointFile  -timeInterval $timeInterval
     $hdrs = @{"X-Requested-With"="powershell"}  
-    $base = "$Uri"
+    $base = "$Uri/fo"
     $body = "action=login&username=$username&password=$password"  
     Invoke-RestMethod -Headers $hdrs -Uri "$base/session/" -Method Post -Body $body -SessionVariable sess  
 
     # Invoke the API Request and assign the response to a variable ($response)
-    $response = (Invoke-RestMethod -Headers $hdrs -Uri "$base/fo/knowledge_base/vuln/?action=list&published_after=$($startDate)$filterparameters" -WebSession $sess) 
+    $response = (Invoke-RestMethod -Headers $hdrs -Uri "$base/knowledge_base/vuln/?action=list&published_after=$($startDate)$filterparameters" -WebSession $sess) 
     
     if($null -ne $response.KNOWLEDGE_BASE_VULN_LIST_OUTPUT.RESPONSE.VULN_LIST.VULN){
         # Iterate through each vulnerability recieved from the API call and assign the variables (Column Names in LA) to each XML variable and place each vulnerability as an object in the $objs array.
