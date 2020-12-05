@@ -110,7 +110,13 @@ function QualysKB {
     $timeInterval = 5
     $filterparameters = $env:filterParameters
     $Uri = $env:Uri
-   
+    $UriValidation = [regex]::Matches($Uri,'https://qualysapi.[^\s,]+/api/2.0')
+
+    if($UriValidation.Success -ne $true){
+        Write-Host "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting.."
+        exit
+    }
+    
     $startDate = GetStartTime -CheckpointFile $CheckPointFile  -timeInterval $timeInterval
     $hdrs = @{"X-Requested-With"="powershell"}  
     $base = "$Uri"
