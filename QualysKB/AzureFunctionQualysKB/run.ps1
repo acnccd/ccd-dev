@@ -114,8 +114,7 @@ function QualysKB {
     $UriValidation = $Uri | Select-String -AllMatches '^https:\/\/qualysapi.([\w\.]+)\/api\/2.0$'
 
     if($null -ne $UriValidation){
-        Write-Host "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
-        exit
+        throw "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
     }
     
     # If filter parameters are defined, add a "&" prefix
