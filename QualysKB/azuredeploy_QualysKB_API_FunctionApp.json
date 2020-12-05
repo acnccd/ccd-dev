@@ -30,14 +30,14 @@
               "type": "string",
               "defaultValue": "https://<API Server URL>/api/2.0/fo",
               "metadata": {
-                "description": "e.g. https://qualysapi.qualys.com/api/2.0/fo\n\nhttps://qualysapi.qualys.com/api/2.0/fo"
+                "description": "For example: https://qualysapi.qualys.com/api/2.0/fo\n https://qualysapi.qualys.com/api/2.0/fo"
                 }
           },
           "FilterParameters(Optional)": {
               "type": "string",
               "defaultValue": "",
               "metadata": {
-              "description": "e.g. id_min=12345&id_max=23456&is_patchable=1"
+              "description": "For example: id_min=12345&id_max=23456&is_patchable=1"
                 }
           }
       },
