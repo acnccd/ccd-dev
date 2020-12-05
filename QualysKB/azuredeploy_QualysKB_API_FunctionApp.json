@@ -28,7 +28,10 @@
           },
           "Uri": {
               "type": "string",
-              "defaultValue": "https://<API Server URL>/api/2.0/fo"
+              "defaultValue": "https://<API Server URL>/api/2.0/fo",
+              "metadata": {
+                "description": "The type of replication to use for the storage account."
+          }
           },
           "FilterParameters(Optional)": {
               "type": "string",
