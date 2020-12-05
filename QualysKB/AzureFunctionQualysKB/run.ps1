@@ -111,9 +111,9 @@ function QualysKB {
     $filterparameters = $env:filterParameters
 
     $Uri = $env:Uri
-    $UriValidation = $Uri | Select-String -AllMatches '(https)(:\/\/)([^\s,]+api/2.0)$'
+    $UriValidation = $Uri | Select-String -AllMatches '^https:\/\/qualysapi.([\w\.]+)\/api\/2.0$'
 
-    if($null -eq $UriValidation){
+    if($null -ne $UriValidation){
         Write-Host "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
         exit
     }
