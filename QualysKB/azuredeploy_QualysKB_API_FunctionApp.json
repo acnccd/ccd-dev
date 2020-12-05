@@ -30,7 +30,7 @@
               "type": "string",
               "defaultValue": "https://<API Server URL>/api/2.0/fo",
               "metadata": {
-                "description": "For example: https://qualysapi.qualys.com/api/2.0/fo\n https://qualysapi.qualys.com/api/2.0/fo"
+                "description": "For example: https://qualysapi.qualys.com/api/2.0"
                 }
           },
           "FilterParameters(Optional)": {
