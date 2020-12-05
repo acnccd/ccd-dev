@@ -120,7 +120,8 @@ function QualysKB {
     $Uri = $env:Uri
 
     # Validate Uri
-    if((UrlValidation -Uri $Uri) -ne $true){
+    $UriValidation = UrlValidation -Uri $Uri
+    if($null -eq $UriValidation){
         Write-Output "ERROR: Invalid URI format detected. Validated URI format before next execution. Function exiting..."
         exit
     }
