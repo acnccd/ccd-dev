@@ -91,9 +91,7 @@
                 ]
             }
         },
-        "networkSecurityGroupName": "default-NSG",
-        "customData": "[concat('#include\n','https://raw.githubusercontent.com/acnccd/ccd-dev/master/armtemplate-dev/crowdstrikeconnector/cloud-init.txt')
-            ]"
+        "networkSecurityGroupName": "default-NSG"
     },
     "resources": [
         {
@@ -214,8 +212,7 @@
                     "computerName": "[parameters('VMName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPasswordOrKey')]",
-                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]",
-                    "customData": "[base64(variables('customData'))]"
+                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
                 },
                 "storageProfile": {
                     "imageReference": {
