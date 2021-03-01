@@ -41,12 +41,6 @@
         "VMSize": {
             "type": "string",
             "defaultValue": "Standard_F8s_v2",
-            "allowedValues": [
-                "Standard_A1_v2",
-                "Standard_A2_v4",
-                "Standard_A4_v2",
-                "Standard_B2s"
-            ],
             "metadata": {
                 "description": "Size of the virtual machine"
             }
@@ -91,7 +85,8 @@
                 ]
             }
         },
-        "networkSecurityGroupName": "default-NSG"
+        "networkSecurityGroupName": "default-NSG",
+        "customData": "[concat('#include\n','https://github.com/acnccd/ccd-dev/blob/master/armtemplate-dev/crowdstrikeconnector/cloud-init.txt')]"
     },
     "resources": [
         {
