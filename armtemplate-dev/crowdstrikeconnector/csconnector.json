@@ -92,7 +92,7 @@
             }
         },
         "networkSecurityGroupName": "default-NSG",
-        "customData": "[concat('#include\n','')
+        "customData": "[concat('#include\n','https://raw.githubusercontent.com/acnccd/ccd-dev/master/armtemplate-dev/crowdstrikeconnector/cloud-init.txt')
             ]"
     },
     "resources": [
