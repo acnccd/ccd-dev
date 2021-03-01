@@ -40,7 +40,7 @@
         },
         "VMSize": {
             "type": "string",
-            "defaultValue": "Standard_A1_v2",
+            "defaultValue": "Standard_F8s_v2",
             "allowedValues": [
                 "Standard_A1_v2",
                 "Standard_A2_v4",
@@ -91,7 +91,9 @@
                 ]
             }
         },
-        "networkSecurityGroupName": "default-NSG"
+        "networkSecurityGroupName": "default-NSG",
+        "customData": "[concat('#include\n','')
+            ]"
     },
     "resources": [
         {
@@ -212,7 +214,8 @@
                     "computerName": "[parameters('VMName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPasswordOrKey')]",
-                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]",
+                    "customData": "[base64(variables('customData'))]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -247,7 +250,7 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "<parentVmResource>/OMSExtension",
+            "name": "[concat(parameters('VMName'),'/','OMSExtension')]",
             "apiVersion": "2018-06-01",
             "location": "[parameters('location')]",
             "dependsOn": [
