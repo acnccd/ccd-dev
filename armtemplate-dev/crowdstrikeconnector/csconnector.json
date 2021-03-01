@@ -207,7 +207,8 @@
                     "computerName": "[parameters('VMName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPasswordOrKey')]",
-                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]",
+                    "customData": "[base64(variables('customData'))]"
                 },
                 "storageProfile": {
                     "imageReference": {
